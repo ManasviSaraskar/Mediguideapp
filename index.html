@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediGuide - AI Medical Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-circle-1"></div>
+  <div class="bg-circle-2"></div>
+
+  <div class="header">
+    <img src="https://res.cloudinary.com/dowhvdkjh/image/upload/v1758017228/image_puig4p.png" alt="MediGuide AI Logo" class="header-logo">
+    <h1>MediGuide</h1>
+    <p>Get personalized medical recommendations based on your symptoms.</p>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="card" id="form-card">
+      <h2>Enter Your Symptoms</h2>
+      <form id="symptom-form">
+        <label for="age">Age</label>
+        <input type="number" id="age" required>
+
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="symptoms-tab">Symptom Description</label>
+        <div class="tab-container">
+            <button type="button" class="tab-button active" data-tab="tab-fever">Fever 🔥</button>
+            <button type="button" class="tab-button" data-tab="tab-headache">Headache 🤕</button>
+            <button type="button" class="tab-button" data-tab="tab-cough">Cough 🤧</button>
+        </div>
+
+        <div id="symptoms-tabs">
+            <div id="tab-fever" class="tab-content active">
+                <textarea id="symptoms-fever" rows="4" placeholder="Describe your fever symptoms (e.g., high temperature, chills, body aches)."></textarea>
+                <div class="suggestion-buttons">
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-fever', 'High temperature')">High temperature</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-fever', 'Chills')">Chills</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-fever', 'Body aches')">Body aches</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-fever', 'Fatigue')">Fatigue</button>
+                </div>
+            </div>
+            <div id="tab-headache" class="tab-content">
+                <textarea id="symptoms-headache" rows="4" placeholder="Describe your headache symptoms (e.g., location, severity, duration)."></textarea>
+                <div class="suggestion-buttons">
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-headache', 'Throbbing pain')">Throbbing pain</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-headache', 'Behind the eyes')">Behind the eyes</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-headache', 'Light sensitivity')">Light sensitivity</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-headache', 'Neck stiffness')">Neck stiffness</button>
+                </div>
+            </div>
+            <div id="tab-cough" class="tab-content">
+                <textarea id="symptoms-cough" rows="4" placeholder="Describe your cough symptoms (e.g., dry, wet, productive, with phlegm)."></textarea>
+                <div class="suggestion-buttons">
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-cough', 'Dry cough')">Dry cough</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-cough', 'Cough with phlegm')">With phlegm</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-cough', 'Sore throat')">Sore throat</button>
+                    <button type="button" class="suggestion-button" onclick="addSymptom('symptoms-cough', 'Chest congestion')">Chest congestion</button>
+                </div>
+            </div>
+            <div id="tab-custom" class="tab-content">
+                <textarea id="symptoms-custom" rows="4" placeholder="Describe your symptoms in detail, including duration, severity, and any other relevant information."></textarea>
+            </div>
+        </div>
+
+        <label for="medical-history">Medical History (optional)</label>
+        <textarea id="medical-history" rows="3" placeholder="Any existing medical conditions, allergies, or current medications"></textarea>
+
+        <button type="submit">Get Recommendations</button>
+      </form>
+    </div>
+
+    <div id="loader">
+      <i class="fas fa-spinner fa-2x"></i>
+      <p>Analyzing your symptoms...</p>
+    </div>
+
+    <div id="results" class="recommendations-section">
+      <h2>Recommendations</h2>
+      <div class="recommendations-grid">
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <h3>Disease</h3>
+          <div id="disease-result">Enter your symptoms to get a potential diagnosis.</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-file-medical-alt"></i>
+          </div>
+          <h3>Description</h3>
+          <div id="description-result">Detailed description will appear here.</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Precautions</h3>
+          <div id="precautions-result">Preventive measures will be listed here.</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-pills"></i>
+          </div>
+          <h3>Medications</h3>
+          <div id="medications-result">Medication suggestions will appear here.</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-dumbbell"></i>
+          </div>
+          <h3>Workout</h3>
+          <div id="workout-result">Exercise recommendations will be provided here.</div>
+        </div>
+
+        <div class="item">
+          <div class="icon">
+            <i class="fas fa-apple-alt"></i>
+          </div>
+          <h3>Diet</h3>
+          <div id="diet-result">Dietary advice will be provided here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer-card">
+    <h3><i class="fas fa-exclamation-triangle"></i> Important Disclaimer</h3>
+    <p>This tool provides recommendations based on the information you provide. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read here.</p>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
